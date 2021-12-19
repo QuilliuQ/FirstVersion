@@ -1,6 +1,10 @@
 package com.example.myapplication
 
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -26,17 +30,37 @@ import com.example.myapplication.screen.Stories
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.telephony.TelephonyManager
+
+
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val id = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+
+
+//        val uid = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+//        val uuid = uid.deviceId
+        Toast.makeText(this, id, Toast.LENGTH_SHORT).show()
         var result : Data? = Data(
             MainScreenBox = Params(Color.White, Color.Black,16.sp),
             AppBar = Params(Color(56,54,77), Color.White,16.sp),
             BottomNavigation = Params(Color.White, Color(142,142,147),9.sp),
             Stories = Params(Color(56,54,77), Color(251,250,249),12.sp),
         )
-        RetrofitObj.retrofit.getParams().enqueue(
+        val hashMap =             hashMapOf(
+            "player_id" to id,
+            "platform" to "Android",
+            "version" to Build.VERSION.RELEASE,
+            "manufacturer" to Build.MANUFACTURER,
+            "model" to Build.MODEL,
+            "serial" to "",
+        )
+        RetrofitObj.retrofit.getParams(
+hashMap
+        ).enqueue(
             object : Callback<DataDto>{
                 override fun onResponse(call: Call<DataDto>, response: Response<DataDto>) {
                     if(response.isSuccessful)
