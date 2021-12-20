@@ -29,13 +29,13 @@ fun TestHeedStandartBanner(
         Color(198, 237, 115)
     )
     Card(
+
         shape = RoundedCornerShape(12.dp),
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.padding(16.dp).fillMaxWidth(),
         backgroundColor = Color.White,
         elevation = 4.dp
     ) {
     Box(
-
         modifier = Modifier.background(brush = Brush.horizontalGradient(list))
         )
      {
