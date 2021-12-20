@@ -20,7 +20,7 @@ import com.example.myapplication.repository.model.Params
 
 @Composable
 fun AppBarVV(params: Params){
-    Card (backgroundColor = params.backgroundColor){
+    Card (backgroundColor = params.backgroundColor?: Color(56,54,77)){
         Row(
             Modifier.padding(start = 16.dp, top = 12.dp, end = 20.dp, bottom = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -29,14 +29,14 @@ fun AppBarVV(params: Params){
             Column {
                 Text(
                     text = "Карта № 3434934",
-                    color = params.textColor,
-                    fontSize = params.fontSize,
+                    color = params.textColor?: Color.White,
+                    fontSize = params.fontSize?: 16.sp,
                     fontWeight = FontWeight(700)
                 )
                 Text(
                     text = "Андрей Кривенко",
-                    color = params.textColor,
-                    fontSize = params.fontSize,
+                    color = params.textColor?: Color.White,
+                    fontSize = params.fontSize?: 16.sp,
                     fontWeight = FontWeight(500)
                 )
             }
@@ -47,11 +47,11 @@ fun AppBarVV(params: Params){
                 contentDescription = null
             )
             BadgedBox(
-                borderColor = params.backgroundColor,
+                borderColor = params.backgroundColor?: Color(56,54,77),
                 badgeContent = {
                     Text(
                         text = "1",
-                        color = params.backgroundColor,
+                        color = params.backgroundColor?: Color(56,54,77),
                         fontSize = 10.sp,
                         fontWeight = FontWeight(700)
                     )

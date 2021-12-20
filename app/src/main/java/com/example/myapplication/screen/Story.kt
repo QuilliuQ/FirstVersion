@@ -20,7 +20,7 @@ import com.example.myapplication.repository.model.Params
 
 @Composable
 fun Story(params: Params) {
-    Column(Modifier.padding(horizontal = 8.dp).background(params.backgroundColor)) {
+    Column(Modifier.padding(horizontal = 8.dp).background(params.backgroundColor?: Color(56,54,77))) {
         Image(
             modifier = Modifier
                 .size(85.dp)
@@ -31,10 +31,10 @@ fun Story(params: Params) {
         Spacer(modifier = Modifier.height(10.dp))
         Text(
             "Вы ведете здоровый образ жизни?",
-            fontSize = params.fontSize,
+            fontSize = params.fontSize?: 12.sp,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight(500),
-            color = params.textColor,
+            color = params.textColor?: Color(251,250,249),
             modifier = Modifier
                 .width(85.dp)
                 .alpha(0.7f)

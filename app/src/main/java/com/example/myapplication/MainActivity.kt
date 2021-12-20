@@ -1,9 +1,9 @@
 package com.example.myapplication
 
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.provider.Settings.Secure.getString
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,25 +30,23 @@ import com.example.myapplication.screen.Stories
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.telephony.TelephonyManager
-
-
 
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val id = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
-
-
-//        val uid = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-//        val uuid = uid.deviceId
-        Toast.makeText(this, id, Toast.LENGTH_SHORT).show()
-        var result : Data? = Data(
+        val id = getString(contentResolver, Settings.Secure.ANDROID_ID)
+        var result = Data(
             MainScreenBox = Params(Color.White, Color.Black,16.sp),
             AppBar = Params(Color(56,54,77), Color.White,16.sp),
             BottomNavigation = Params(Color.White, Color(142,142,147),9.sp),
             Stories = Params(Color(56,54,77), Color(251,250,249),12.sp),
+        )
+        val resource = Resource(
+            true,
+            true,
+            true,
+            true
         )
         val hashMap =             hashMapOf(
             "player_id" to id,
@@ -57,35 +55,47 @@ class MainActivity : ComponentActivity() {
             "manufacturer" to Build.MANUFACTURER,
             "model" to Build.MODEL,
             "serial" to "",
+            "resource" to resource
         )
         RetrofitObj.retrofit.getParams(
 hashMap
         ).enqueue(
-            object : Callback<DataDto>{
-                override fun onResponse(call: Call<DataDto>, response: Response<DataDto>) {
+            object : Callback<ResponseData>{
+                override fun onResponse(call: Call<ResponseData>, response: Response<ResponseData>) {
                     if(response.isSuccessful)
                     {
                         if(response.body() != null)
                         {
-                            result = response.body()!!.toData()
+                            result = response.body()!!.item.content.toData()
+                            setContent {
+                                MyApplicationTheme {
+                                    // A surface container using the 'background' color from the theme
+                                    Surface() {
+                                        Screen(result)
+                                    }
+                                }
+                            }
+                        }
+                        else{
+                            setContent {
+                                MyApplicationTheme {
+                                    // A surface container using the 'background' color from the theme
+                                    Surface() {
+                                        Screen(result)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
 
-                override fun onFailure(call: Call<DataDto>, t: Throwable) {
+                override fun onFailure(call: Call<ResponseData>, t: Throwable) {
 
                 }
 
             }
         )
-        setContent {
-            MyApplicationTheme {
-                // A surface container using the 'background' color from the theme
-                Surface() {
-                    result?.let { Screen(it) }
-            }
-        }
-    }
+
 }
 
     @Composable
